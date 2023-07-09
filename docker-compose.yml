@@ -11,3 +11,17 @@ services:
       MONGODB_DATABASE: sleepr_db
     volumes:
       - ./mongo:/data/db
+
+  reservations:
+    depends_on:
+      - db_service
+    container_name: reservationsService
+    build:
+      context: .
+      dockerfile: ./apps/reservations/Dockerfile
+      target: development
+    command: pnpm run start:dev reservations
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
