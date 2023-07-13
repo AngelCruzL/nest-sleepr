@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 import * as Joi from 'joi';
 
 import { LoggerModule } from '@app/common';
@@ -20,6 +21,15 @@ import { UsersModule } from './users/users.module';
         JWT_EXPIRES_IN: Joi.string().required(),
         PORT: Joi.number().required(),
       }),
+    }),
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
+        },
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
