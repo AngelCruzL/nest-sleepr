@@ -8,6 +8,7 @@ import { LoggerModule } from '@app/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from './users/users.module';
+import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { UsersModule } from './users/users.module';
       validationSchema: Joi.object({
         MONGO_DB_URI: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
-        JWT_EXPIRES_IN: Joi.string().required(),
+        JWT_EXPIRES_IN_SECONDS: Joi.string().required(),
         PORT: Joi.number().required(),
       }),
     }),
@@ -26,13 +27,13 @@ import { UsersModule } from './users/users.module';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
+          expiresIn: `${configService.get<string>('JWT_EXPIRES_IN_SECONDS')}s`,
         },
       }),
       inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, LocalStrategy],
 })
 export class AuthModule {}
