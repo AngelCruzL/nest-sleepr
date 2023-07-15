@@ -1,5 +1,5 @@
 FROM node:alpine AS development
-LABEL authors="angelcruz"
+LABEL authors="angelcruz"ºº
 
 WORKDIR /usr/src/app
 
