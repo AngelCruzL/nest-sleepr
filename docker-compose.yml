@@ -55,7 +55,19 @@ services:
     command: pnpm run start:dev payments
     env_file:
       - ./apps/payments/.env
-    ports:
-      - "3003:3003"
+    volumes:
+      - .:/usr/src/app
+
+  notifications:
+    depends_on:
+      - db_service
+    container_name: notificationsService
+    build:
+      context: .
+      dockerfile: ./apps/notifications/Dockerfile
+      target: development
+    command: pnpm run start:dev notifications
+    env_file:
+      - ./apps/notifications/.env
     volumes:
       - .:/usr/src/app
