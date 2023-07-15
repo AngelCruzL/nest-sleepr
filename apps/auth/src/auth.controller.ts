@@ -2,9 +2,9 @@ import { Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Response } from 'express';
 
+import { CurrentUser, UserDocument } from '@app/common';
+
 import { JwtAuthGuard, LocalAuthGuard } from './guards';
-import { CurrentUser } from '@app/common';
-import { UserDocument } from './users/models';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
